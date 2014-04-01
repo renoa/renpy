@@ -36,7 +36,7 @@ from cpython.ref cimport PyObject, Py_XINCREF, Py_XDECREF
 #     An offset that is applied to the priority of the property.
 # value
 #     The value of the style property.
-ctypedef int (*property_function)(PyObject **cache, int *cache_priorities, int priority, object value) except -1
+ctypedef int (*property_function)(PyObject **cache, int *cache_priorities, int priority, object value, object self) except -1
 
 cdef inline void assign(int index, PyObject **cache, int *cache_priorities, int priority, PyObject *value):
     """
@@ -74,6 +74,8 @@ cdef class StyleCore:
 
     # The help for the style object.
     cdef public object help
+
+    cdef public object contents
 
     ############################################################# Private Fields
 

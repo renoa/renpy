@@ -1188,3 +1188,9 @@ class Canvas(object):
                                 blend)
         finally:
             blit_lock.release()
+
+def reset_module():
+    print "Reset redraw queue!"
+
+    global redraw_queue
+    redraw_queue = [ ]

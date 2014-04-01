@@ -461,6 +461,9 @@ def show_screen(_screen_name, *_args, **kwargs):
     initialize the screen's scope.
     """
 
+    if _screen_name == "say":
+        print "ZZZ", kwargs
+
     _layer = kwargs.pop("_layer", "screens")
     _tag = kwargs.pop("_tag", None)
     _widget_properties = kwargs.pop("_widget_properties", {})

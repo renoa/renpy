@@ -558,10 +558,20 @@ def style_profile():
 
     def print_path(o):
 
+
         seen = set()
         queue = [ ]
 
         for _i in range(30):
+
+            print id(o), type(o),
+            try:
+                if isinstance(o, dict) and __name__ in o:
+                    print o["__name__"],
+
+                print repr(o)#[:1000]
+            except:
+                print "Bad repr."
 
             found = False
 
@@ -597,17 +607,8 @@ def style_profile():
 
             o = queue.pop()
 
-            print id(o), type(o),
-            try:
-                if isinstance(o, dict) and __name__ in o:
-                    print o["__name__"],
-
-                print repr(o)[:1000]
-            except:
-                print "Bad repr."
-
     for o in objs:
 
-        if type(o).__name__.endswith("Texture"):
+        if isinstance(o, renpy.style.Style):
             print
             print_path(o)

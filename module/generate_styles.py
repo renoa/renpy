@@ -412,7 +412,7 @@ def generate_constants():
 def generate_property_function(g, prefix, propname, properties):
     name = prefix.name + propname
 
-    g.write("cdef int {name}_property(PyObject **cache, int *cache_priorities, int priority, object value) except -1:", name=name)
+    g.write("cdef int {name}_property(PyObject **cache, int *cache_priorities, int priority, object value, object self) except -1:", name=name)
     g.indent()
 
     g.write("priority += {}", prefix.priority)
@@ -434,6 +434,8 @@ def generate_property_function(g, prefix, propname, properties):
         if propfunc is not None:
             g.write("v = {propfunc}({value})", propfunc=propfunc, value=value)
             value = "v"
+
+        g.write("self.contents.append({})", value)
 
         for alt, alt_name in zip(prefix.alts, prefix.alt_names):
             g.write("assign({}, cache, cache_priorities, priority, <PyObject *> {}) # {}{}",

@@ -260,11 +260,12 @@ def show_display_say(who, what, who_args={}, what_args={}, window_args={},
             two_window=two_window,
             who=who,
             what=what,
+            _layer="say",
             **kwargs)
 
         renpy.exports.shown_window()
 
-        return renpy.display.screen.get_widget(screen, "what")
+        return renpy.display.screen.get_widget(screen, "what", layer='say')
 
 
     # Apply the transform.

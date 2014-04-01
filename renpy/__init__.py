@@ -69,9 +69,8 @@ backup_blacklist = {
     "renpy.bootstrap",
     "renpy.display",
     "renpy.display.pgrender",
-    "renpy.display.scale"
-    "renpy.reload",
-
+    "renpy.display.scale",
+    "renpy.display.render",
     "renpy.text.ftfont",
     }
 
@@ -176,10 +175,6 @@ class Backup():
             modvars = vars(mod)
             for name in set(modvars.keys()) - names:
                 del modvars[name]
-
-            reset_module = getattr(mod, "reset_module", None)
-            if reset_module is not None:
-                reset_module()
 
 
         objects = cPickle.loads(self.objects_pickle)
@@ -400,7 +395,12 @@ def reload_all():
     renpy.display.draw.deinit()
     renpy.display.draw = None
     renpy.display.interface = None
+
+    # Clean the render module.
     renpy.display.render.render_cache.clear()
+    renpy.display.render.redraw_queue[:] = [ ]
+    print "IDRENDER", id(renpy.display.render.__dict__)
+
 
     # Delete the store modules.
     for i in sys.modules.keys():
@@ -412,11 +412,22 @@ def reload_all():
 
             del sys.modules[i]
 
+    # Reset some modules.
+    for mod in sys.modules.values():
+
+        if mod is None:
+            continue
+
+        reset_module = getattr(mod, "reset_module", None)
+        if reset_module is not None:
+            reset_module()
+
+
 
     # Restore the state of all modules from backup.
     backup.restore()
 
-
+    print "ZZZ ZZZ ZZA", renpy.display.render.redraw_queue
 
     post_import()
 

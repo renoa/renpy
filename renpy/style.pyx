@@ -285,6 +285,8 @@ cdef class StyleCore:
         self.name = name
         self.help = help
 
+        self.contents = [ ]
+
     def __dealloc__(self):
         cdef int i
 
@@ -629,7 +631,7 @@ cpdef build_style(StyleCore s):
                 continue
 
             try:
-                pfw.function(s.cache, cache_priorities, priority, v)
+                pfw.function(s.cache, cache_priorities, priority, v, s)
             except:
                 renpy.game.exception_info = "While processing the {} property of {}:".format(k, style_name_to_string(s.name))
                 raise
